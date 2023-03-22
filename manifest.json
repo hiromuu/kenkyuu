@@ -1,0 +1,32 @@
+{
+    "manifest_version": 2,
+    "name": "なろうNFT",
+    "version": "1.0.0",
+    "description": "小説家になろうサイトでNFTやトークンを取得できる拡張機能",
+    "icons": {
+      "48": "icon_48.png",
+      "128": "icon_128.png"
+    },
+    "permissions": [
+      "activeTab",
+      "storage",
+      "https://your-firebase-project-url/*"
+    ],
+    "browser_action": {
+      "default_icon": "icon_48.png",
+      "default_popup": "popup.html",
+      "default_title": "なろうNFT"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "*://*.syosetu.com/*"
+        ],
+        "js": ["content_script.js"]
+      }
+    ],
+    "content_security_policy": "script-src 'self' https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js; object-src 'self'",
+    "web_accessible_resources": [
+      "firebase.js"
+    ]
+  }
