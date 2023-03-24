@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
     // Firebaseの初期化
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID",
+      apiKey: "AIzaSyB4dzdHTOeF16EiF26w13Z1SNDa7BJpUMQ",
+      authDomain: "kenkyuu-c37de.firebaseapp.com",
+      projectId: "kenkyuu-c37de",
+      storageBucket: "kenkyuu-c37de.appspot.com",
+      messagingSenderId: "410712409466",
+      appId: "1:410712409466:web:122b018efdc57fecf882c3",
     };
     firebase.initializeApp(firebaseConfig);
   

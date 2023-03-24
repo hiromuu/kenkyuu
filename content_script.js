@@ -1,47 +1,58 @@
 // この関数は、ユーザーが作品を読む、編集、コメント、いいねなどのアクションを実行したときにトリガーされるイベントリスナーを設定する
 function setupEventListeners() {
     // 以下のコードは、実際のイベントリスナーの設定方法の例です
-    const likeButton = document.querySelector(".like-button");
-    likeButton.addEventListener("click", () => {
-      rewardTokens("like");
+    // 読書イベントのリスナー
+    document.addEventListener('read', () => {
+      rewardTokens('read');
+    });
+
+    // 添削イベントのリスナー
+    document.addEventListener('review', () => {
+      rewardTokens('review');
+    });
+
+    // コメントイベントのリスナー
+    document.addEventListener('comment', () => {
+      rewardTokens('comment');
+    });
+
+    // いいねイベントのリスナー
+    document.addEventListener('like', () => {
+      rewardTokens('like');
     });
   
     // 他のアクションに対するイベントリスナーも同様に設定
   }
 
   async function rewardTokens(action) {
-    let tokens = 0;
+    try {
+      const accounts = await web3.eth.getAccounts();
+      const account = accounts[0];
   
-    switch (action) {
-      case "read":
-        tokens = 5;
-        break;
-      case "edit":
-        tokens = 10;
-        break;
-      case "comment":
-        tokens = 3;
-        break;
-      case "like":
-        tokens = 2;
-        break;
-      default:
-        console.error("Unknown action:", action);
-        return;
-    }
+      // 報酬として与えられるトークンの量を指定します。
+      let tokenAmount;
+      switch (action) {
+        case 'read':
+          tokenAmount = 1;
+          break;
+        case 'review':
+          tokenAmount = 2;
+          break;
+        case 'comment':
+          tokenAmount = 3;
+          break;
+        case 'like':
+          tokenAmount = 4;
+          break;
+        default:
+          throw new Error('Invalid action');
+      }
   
-    const response = await fetch("https://example.com/api/reward_tokens", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action, tokens }),
-    });
-  
-    if (response.ok) {
-      console.log("Tokens rewarded:", tokens);
-    } else {
-      console.error("Failed to reward tokens");
+      // スマートコントラクトに報酬トークンをリクエストする。
+      await contract.methods.rewardTokens(account, tokenAmount).send({ from: account });
+      console.log(`Tokens rewarded for ${action} action`);
+    } catch (error) {
+      console.error(`Failed to reward tokens for ${action} action:`, error);
     }
   }
   
@@ -105,28 +116,4 @@ function setupEventListeners() {
       console.error("Failed to send tokens:", error);
     }
   }
-
-  async function updateUserTokenBalance(userId, newTokenBalance) {
-    try {
-      const response = await fetch("https://your-backend-server.com/api/update-token-balance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: userId,
-          newTokenBalance: newTokenBalance,
-        }),
-      });
   
-      const data = await response.json();
-  
-      if (response.ok) {
-        console.log("User token balance updated successfully:", data);
-      } else {
-        console.error("Failed to update user token balance:", data);
-      }
-    } catch (error) {
-      console.error("Failed to update user token balance:", error);
-    }
-  }
