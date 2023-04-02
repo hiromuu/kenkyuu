@@ -1,13 +1,15 @@
+require('dotenv').config();
 document.addEventListener("DOMContentLoaded", async () => {
     // Firebaseの初期化
     const firebaseConfig = {
-      apiKey: "AIzaSyB4dzdHTOeF16EiF26w13Z1SNDa7BJpUMQ",
-      authDomain: "kenkyuu-c37de.firebaseapp.com",
-      projectId: "kenkyuu-c37de",
-      storageBucket: "kenkyuu-c37de.appspot.com",
-      messagingSenderId: "410712409466",
-      appId: "1:410712409466:web:122b018efdc57fecf882c3",
+      apiKey: process.env.FIREBASE_API_KEY,
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.FIREBASE_APP_ID,
     };
+    
     firebase.initializeApp(firebaseConfig);
   
     const nftBalanceElement = document.getElementById("nft-balance");

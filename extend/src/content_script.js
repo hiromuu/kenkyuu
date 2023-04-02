@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 // この関数は、ユーザーが作品を読む、編集、コメント、いいねなどのアクションを実行したときにトリガーされるイベントリスナーを設定する
 function setupEventListeners() {
     // 以下のコードは、実際のイベントリスナーの設定方法の例です
@@ -57,17 +58,13 @@ function setupEventListeners() {
   }
   
   setupEventListeners();
-  
-  const Web3 = require("web3");
 
   // イーサリアムプロバイダーとWeb3インスタンスの設定
   const web3 = new Web3(window.ethereum);
   
   // スマートコントラクトのアドレスとABIを設定
-  const contractAddress = "0xYourContractAddress";
-  const contractABI = [
-    // Your contract ABI
-  ];
+  const contractAddress =process.env.contractAddress;
+  const contractABI = process.env.contractABI;
   
   // スマートコントラクトのインスタンスを作成
   const contract = new web3.eth.Contract(contractABI, contractAddress);
