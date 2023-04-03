@@ -1,4 +1,7 @@
 import Web3 from 'web3';
+import { nftContractAddress, nftContractABI} from './contractConfig.js';
+import { setupEventListeners } from './eventListeners.js';
+import { getNFTLevel } from './nftLevel.js';
 // この関数は、ユーザーが作品を読む、編集、コメント、いいねなどのアクションを実行したときにトリガーされるイベントリスナーを設定する
 function setupEventListeners() {
     // 以下のコードは、実際のイベントリスナーの設定方法の例です
@@ -24,6 +27,7 @@ function setupEventListeners() {
   
     // 他のアクションに対するイベントリスナーも同様に設定
   }
+  
 
   async function rewardTokens(action) {
     try {
@@ -61,17 +65,20 @@ function setupEventListeners() {
 
   // イーサリアムプロバイダーとWeb3インスタンスの設定
   const web3 = new Web3(window.ethereum);
-  
-  // スマートコントラクトのアドレスとABIを設定
-  const contractAddress =process.env.contractAddress;
-  const contractABI = process.env.contractABI;
+
+
+  // NFTスマートコントラクトのインスタンス
+const nftContract = new web3.eth.Contract(nftContractABI, nftContractAddress);
+
+// トークンスマートコントラクトのインスタンス
+const tokenContract = new web3.eth.Contract(tokenContractABI, tokenContractAddress);
   
   // スマートコントラクトのインスタンスを作成
   const contract = new web3.eth.Contract(contractABI, contractAddress);
   
   async function getNFTBalance(address) {
     try {
-      const balance = await contract.methods.balanceOf(address).call();
+      const balance = await nftContract.methods.balanceOf(address).call();
       return balance;
     } catch (error) {
       console.error("Failed to get NFT balance:", error);
@@ -81,7 +88,7 @@ function setupEventListeners() {
   
   async function getTokenBalance(address) {
     try {
-      const balance = await contract.methods.getTokenBalance(address).call();
+      const balance = await tokenContract.methods.getTokenBalance(address).call();
       return balance;
     } catch (error) {
       console.error("Failed to get token balance:", error);
@@ -95,7 +102,7 @@ function setupEventListeners() {
       const account = accounts[0];
       const price = 1; // NFTの価格（トークン）
   
-      await contract.methods.buyNFT().send({ from: account, value: price });
+      await tokenContract.methods.buyNFT().send({ from: account, value: price });
       console.log("NFT purchased successfully");
     } catch (error) {
       console.error("Failed to buy NFT:", error);
@@ -107,10 +114,14 @@ function setupEventListeners() {
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
   
-      await contract.methods.sendTokens(receiverAddress, amount).send({ from: account });
+      await tokenContract.methods.sendTokens(receiverAddress, amount).send({ from: account });
       console.log("Tokens sent successfully");
     } catch (error) {
       console.error("Failed to send tokens:", error);
     }
   }
   
+  (async () => {
+    // イベントリスナーの設定
+    await setupEventListeners();
+  })();

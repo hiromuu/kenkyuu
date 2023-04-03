@@ -4,7 +4,8 @@
   "description": "",
   "main": "background.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,7 @@
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.2",
     "html-webpack-plugin": "^5.5.0",
-    "webpack": "^5.76.3",
+    "webpack": "^5.77.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.1"
   }

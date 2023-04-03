@@ -1,16 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv')
+const env = dotenv.config().parsed;
 
 module.exports = {
   mode: 'development',
+  devtool: 'source-map', // 'inline-source-map' から 'none' に変更
   entry: {
-    content_script: './src/content_script.js',
+    content_script: './content_script.js',
   },
   output: {
+    path: path.resolve(__dirname),
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
   },
-  devtool: 'none',
   module: {
     rules: [
       {
@@ -18,18 +21,14 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
         },
       },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'content_script.html',
-      template: 'src/content_script.html',
-      chunks: ['content_script'],
-    }),
+    // ...
+    new webpack.DefinePlugin({
+    'process.env': JSON.stringify(env),
+  }),
   ],
 };
